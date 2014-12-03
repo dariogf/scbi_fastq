@@ -1,4 +1,5 @@
 require 'zlib'
+require 'scbi_multi_gz_reader'
 
 # add ord method to ruby 1.8
 if !String.instance_methods.include?(:ord)
@@ -22,7 +23,6 @@ class FastqFile
   #------------------------------------
   def initialize(fasta_file_name, mode='r', fastq_type = :sanger, qual_to_array=true, qual_to_phred=true)
 
-
      
     if mode.upcase.index('W.GZ')
       @fastq_file = Zlib::GzipWriter.open(fasta_file_name)
@@ -43,9 +43,10 @@ class FastqFile
         @fastq_file = fasta_file_name
       else
         begin
-          @fastq_file = Zlib::GzipReader.open(fasta_file_name)
+          #@fastq_file = Zlib::GzipReader.open(fasta_file_name)
+          @fastq_file = MultiGzReader.new(fasta_file_name)
           # puts "GZIP file detected"
-        rescue
+        rescue => e
           @fastq_file = File.open(fasta_file_name,'r')
           # puts "NORMAL file detected"
         end
