@@ -30,7 +30,6 @@ class TestScbiFastq < Test::Unit::TestCase
 
     fqr.close
 
-
   end
 
 
