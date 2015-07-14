@@ -228,12 +228,13 @@ class TestScbiFastq < Test::Unit::TestCase
     #fill_file(100)
 
 
-    fqr=FastqFile.new('/tmp/pair2.fastq.gz')
+    #fqr=FastqFile.new('/tmp/pair2.fastq.gz')
+    fqr=FastqFile.new('/tmp/659634_4-4_2.fastq.gz')
 
     i=1
 
     fqr.each do |n,s,q|
-      puts n
+      #puts n
       #assert_equal(@seq_name+i.to_s,n)
       #assert_equal(@seq_fasta*i,s)
       #assert_equal((@seq_qual*i*@seq_fasta.length),q)
