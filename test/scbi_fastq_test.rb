@@ -32,45 +32,6 @@ class TestScbiFastq < Test::Unit::TestCase
 
   end
 
-
-  def test_mini_multi_gz_reader
-
-    file=MultiGzReader.new(File.join(File.dirname(__FILE__),'minitest.fastq.gz'))
-    
-    i=0
-
-    loop do
-      res=file.readline
-      #puts "LINE: #{res}"
-      break if res.nil?
-      i=i+1
-    end
-
-    file.close
-
-    assert_equal(i,28)
-
-  end
-
-  def test_mini_multi_gz_reader_EOF_while
-
-    # test a file with multiple gz streams
-
-    fqr=FastqFile.new(File.join(File.dirname(__FILE__),'minitest.fastq.gz'))
-    
-    i=0
-
-    fqr.each do |n,s,q|
-      if !n.nil?
-        i+=1
-      end
-    end
-
-    fqr.close
-
-    assert_equal(7,i)
-
-  end
   
   def fill_file(n,offset=33)
     f=FastqFile.new(@test_file,'w')
@@ -206,6 +167,8 @@ class TestScbiFastq < Test::Unit::TestCase
   end
 
 
+
+
   def fill_file_gz(n,offset=33)
     f=FastqFile.new(@test_file_gz,'w.gz')
     puts "FILE GZ"
@@ -258,4 +221,30 @@ class TestScbiFastq < Test::Unit::TestCase
   #   fq.close
   #
   # end
+
+   def test_each_large
+
+    # make new file and fill with data
+    #fill_file(100)
+
+
+    fqr=FastqFile.new('/tmp/pair2.fastq.gz')
+
+    i=1
+
+    fqr.each do |n,s,q|
+      puts n
+      #assert_equal(@seq_name+i.to_s,n)
+      #assert_equal(@seq_fasta*i,s)
+      #assert_equal((@seq_qual*i*@seq_fasta.length),q)
+
+      i+=1
+    end
+
+    assert_equal(40,i)
+      
+
+    fqr.close
+  end
+
 end

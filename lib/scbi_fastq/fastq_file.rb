@@ -1,5 +1,5 @@
 require 'zlib'
-require 'scbi_multi_gz_reader'
+require 'scbi_zcat'
 
 # add ord method to ruby 1.8
 if !String.instance_methods.include?(:ord)
@@ -42,11 +42,12 @@ class FastqFile
       if fasta_file_name.is_a?(IO)
         @fastq_file = fasta_file_name
       else
-        begin
+        if ScbiZcatFile.gz_file?(fasta_file_name)
           #@fastq_file = Zlib::GzipReader.open(fasta_file_name)
-          @fastq_file = MultiGzReader.new(fasta_file_name)
+          #@fastq_file = MultiGzReader.new(fasta_file_name)
+          @fastq_file = ScbiZcatFile.new(fasta_file_name)
           # puts "GZIP file detected"
-        rescue => e
+        else
           @fastq_file = File.open(fasta_file_name,'r')
           # puts "NORMAL file detected"
         end
